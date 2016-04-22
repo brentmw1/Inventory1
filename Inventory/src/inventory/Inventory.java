@@ -205,11 +205,12 @@ public class Inventory extends Application{
                 isFound = false;
                 
                 for (int i = 0; i < numEntries; i++) {
-                    if (search.equalsIgnoreCase(entryList[i].name.substring(0, sLength))) {
-                        System.out.println("-- " + entryList[i].name);
-                        System.out.println("-- " + entryList[i].number);
-                        System.out.println("-- " + entryList[i].notes + "\n");
-                        isFound = true;
+                    if (sLength < entryList[i].name.length())
+                        if (search.equalsIgnoreCase(entryList[i].name.substring(0, sLength))) {
+                            System.out.println("-- " + entryList[i].name);
+                            System.out.println("-- " + entryList[i].number);
+                            System.out.println("-- " + entryList[i].notes + "\n");
+                            isFound = true;
                     }
                 }
                 if (!isFound) {
