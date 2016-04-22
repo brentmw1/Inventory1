@@ -88,7 +88,7 @@ public class Inventory extends Application{
         v = new VBox();  
         name = new TextField("Name");
         quantity = new TextField("#");
-        notes = new TextField("Notes");
+        notes = new TextField("N/A");
 
         
         G.add(nameText, 1, 1);
@@ -176,22 +176,23 @@ public class Inventory extends Application{
     
     public void findEntry() {
         Stage findStage;
-        StackPane pane;
+        VBox v;
         Button ok;
         Text instructions;
         TextField field;
         
         findStage = new Stage();
-        pane = new StackPane();
+        v = new VBox();
         ok = new Button("OK");
         instructions = new Text("Enter the name or part of the name of the item you wish to find.");
         instructions.setFont(Font.font(20));
         field = new TextField("Item");
         
-        pane.getChildren().addAll(instructions, field, ok);
-        pane.setAlignment(instructions, Pos.TOP_CENTER);
-        pane.setAlignment(ok, Pos.BOTTOM_CENTER);
-        findStage.setScene(new Scene(pane));
+        v.getChildren().addAll(instructions, field, ok);
+        v.setAlignment(Pos.CENTER);
+        v.setPadding(new Insets(10, 10, 10, 10));
+        v.setSpacing(10);
+        findStage.setScene(new Scene(v));
         findStage.setTitle("Find Entry");
         findStage.setMinHeight(150);
         ok.setOnAction(event -> {
@@ -235,12 +236,14 @@ public class Inventory extends Application{
         Button ok;
         
         deleteStage = new Stage();
-        instructions = new Text("\nEnter the name of the item you wish to delete.\n");
+        instructions = new Text("Enter the name of the item you wish to delete.");
         f = new TextField("Name");
         instructions.setFont(Font.font(20));
         ok = new Button("Delete");
         v = new VBox();
         v.setAlignment(Pos.CENTER);
+        v.setPadding(new Insets(10, 10, 10, 10));
+        v.setSpacing(10);
         v.getChildren().addAll(instructions, f, ok);
         deleteStage.setScene(new Scene(v));
         deleteStage.setTitle("Delete Entry");
@@ -331,6 +334,7 @@ public class Inventory extends Application{
         
         v.getChildren().addAll(message, ok);
         v.setAlignment(Pos.CENTER);
+        v.setPadding(new Insets(10, 10, 10, 10));
         if (b)
             okStage.setTitle("Success");
         else
