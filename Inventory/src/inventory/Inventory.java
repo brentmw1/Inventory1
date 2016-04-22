@@ -1,4 +1,5 @@
 //Brent Wickenheiser
+//Joseph Ferrara
 //Project 6
 /*Allows user to enter and search items in an inventory list that will save
 between runs of the program*/
