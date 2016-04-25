@@ -34,13 +34,13 @@ public class Inventory extends Application{
     public static Entry[] entryList = new Entry[200];
     
     public void start(Stage stage) {
-        this.stage = stage;
-        addButton = new Button("Add Entry");
-        findButton = new Button("Find Entry");
+        this.stage   = stage;
+        addButton    = new Button("Add Entry");
+        findButton   = new Button("Find Entry");
         deleteButton = new Button("Delete Entry");
-        listButton = new Button("List Entries");
-        saveButton = new Button("Save Entries");
-        mainScreen = new VBox();
+        listButton   = new Button("List Entries");
+        saveButton   = new Button("Save Entries");
+        mainScreen   = new VBox();
         toolBar = new ToolBar(addButton, findButton, deleteButton, listButton, saveButton);
         //toolBar.setMinHeight(50);
         this.stage.setTitle("Inventory");
@@ -49,23 +49,23 @@ public class Inventory extends Application{
         this.stage.show();
         this.stage.setMinWidth(520);
         
-        addButton.setOnAction(event -> {
+        addButton.setOnAction   (event -> {
             addEntry();
         });
-        findButton.setOnAction(event -> {
+        findButton.setOnAction  (event -> {
             findEntry();
         });
         deleteButton.setOnAction(event -> {
             deleteEntry();
         });
-        saveButton.setOnAction(event -> {
+        saveButton.setOnAction  (event -> {
             try {
                 storeInventory(numEntries);
             }catch (Exception e) {
                 
             }
         });
-        listButton.setOnAction(event -> {
+        listButton.setOnAction  (event -> {
             listEntries();
         });
     }
@@ -79,16 +79,16 @@ public class Inventory extends Application{
         VBox v;
         
         addStage = new Stage();
-        G = new GridPane();
-        ok = new Button("OK");
-        nameText = new Text("Item Name: ");
-        numText = new Text("Quantity: ");
-        notesText = new Text("Notes: ");
+        G        = new GridPane();
+        ok       = new Button("OK");
+        nameText     = new Text("Item Name: ");
+        numText      = new Text("Quantity: ");
+        notesText    = new Text("Notes: ");
         instructions = new Text("Enter the name, quantity, and notes for the entry.");
         v = new VBox();  
-        name = new TextField("Name");
+        name     = new TextField("Name");
         quantity = new TextField("#");
-        notes = new TextField("N/A");
+        notes    = new TextField("N/A");
 
         
         G.add(nameText, 1, 1);
@@ -117,12 +117,12 @@ public class Inventory extends Application{
             
             ID = name.getText();
             try {
-                num = Integer.parseInt(quantity.getText());
+                num  = Integer.parseInt(quantity.getText());
                 note = notes.getText();
                 String nameError, numError;
                 
                 nameError = "";
-                numError = "";
+                numError  = "";
                 if (ID.length() > 8 || num < 0) {
                    if (ID.length() > 8) 
                        nameError = "Item name bust be 8 or fewer characters.";
@@ -149,10 +149,10 @@ public class Inventory extends Application{
     }
     
     public void addEntry(String name, int number, String notes) {
-        entryList[numEntries] = new Entry();
-        entryList[numEntries].name = name;
+        entryList[numEntries]        = new Entry();
+        entryList[numEntries].name   = name;
         entryList[numEntries].number = number;
-        entryList[numEntries].notes = notes;
+        entryList[numEntries].notes  = notes;
         numEntries++;
     }
     
@@ -182,7 +182,7 @@ public class Inventory extends Application{
         TextField field;
         
         findStage = new Stage();
-        v = new VBox();
+        v  = new VBox();
         ok = new Button("OK");
         instructions = new Text("Enter the name or part of the name of the item you wish to find.");
         instructions.setFont(Font.font(20));
@@ -235,12 +235,12 @@ public class Inventory extends Application{
         TextField f;
         Button ok;
         
-        deleteStage = new Stage();
+        deleteStage  = new Stage();
         instructions = new Text("Enter the name of the item you wish to delete.");
         f = new TextField("Name");
         instructions.setFont(Font.font(20));
         ok = new Button("Delete");
-        v = new VBox();
+        v  = new VBox();
         v.setAlignment(Pos.CENTER);
         v.setPadding(new Insets(10, 10, 10, 10));
         v.setSpacing(10);
@@ -274,13 +274,13 @@ public class Inventory extends Application{
     
     public void delete(int index) {
         for (int i = index; i < numEntries - 1; i++) {
-            entryList[i].name = entryList[i + 1].name;
+            entryList[i].name   = entryList[i + 1].name;
             entryList[i].number = entryList[i + 1].number;
-            entryList[i].notes = entryList[i + 1].notes;
+            entryList[i].notes  = entryList[i + 1].notes;
         }
-        entryList[numEntries - 1].name = null;
+        entryList[numEntries - 1].name   = null;
         entryList[numEntries - 1].number = 0;
-        entryList[numEntries - 1].notes = null;
+        entryList[numEntries - 1].notes  = null;
         numEntries--;
     }
     
@@ -291,8 +291,8 @@ public class Inventory extends Application{
         ColumnConstraints column1 = new ColumnConstraints();
     
         G = new GridPane();      
-        nameLabel = new Text("Item Name");
-        numLabel = new Text("Quantity");
+        nameLabel  = new Text("Item Name");
+        numLabel   = new Text("Quantity");
         notesLabel = new Text("Notes");
         column1.setHalignment(HPos.LEFT);
         G.setVgap(5);
@@ -301,22 +301,22 @@ public class Inventory extends Application{
         G.add(numLabel, 2, 1);
         G.add(notesLabel, 3, 1);
         G.getColumnConstraints().add(column1);
-        entryName = new Text[numEntries];
-        entryNum = new Text[numEntries];
+        entryName  = new Text[numEntries];
+        entryNum   = new Text[numEntries];
         entryNotes = new Text[numEntries];
         mainScreen.getChildren().clear();        
         
         for (int i = 0; i < numEntries; i++) {
-            entryName[i] = new Text(entryList[i].name);
-            entryNum[i] = new Text(entryList[i].number + "");
+            entryName[i]  = new Text(entryList[i].name);
+            entryNum[i]   = new Text(entryList[i].number + "");
             entryNotes[i] = new Text(entryList[i].notes);
             if (i % 2 == 1) {
-                entryName[i].setFill(Color.GREEN);
-                entryNum[i].setFill(Color.GREEN);
+                entryName[i].setFill (Color.GREEN);
+                entryNum[i].setFill  (Color.GREEN);
                 entryNotes[i].setFill(Color.GREEN);
             } else {
-                entryName[i].setFill(Color.BLUE);
-                entryNum[i].setFill(Color.BLUE);
+                entryName[i].setFill (Color.BLUE);
+                entryNum[i].setFill  (Color.BLUE);
                 entryNotes[i].setFill(Color.BLUE);
             }
             G.add(entryName[i], 1, i + 2);
@@ -328,9 +328,9 @@ public class Inventory extends Application{
     
     public void genericOK(String s, boolean b) {
         Stage okStage = new Stage();
-        Text message = new Text(s);
-        Button ok = new Button("OK");
-        VBox v = new VBox();
+        Text message  = new Text(s);
+        Button ok     = new Button("OK");
+        VBox v        = new VBox();
         
         v.getChildren().addAll(message, ok);
         v.setAlignment(Pos.CENTER);
@@ -362,11 +362,11 @@ public class Inventory extends Application{
             else {
             input = input.trim();
             entryList[i] = new Entry();
-            entryList[i].name = input.substring(0, input.indexOf("\t"));
+            entryList[i].name   = input.substring(0, input.indexOf("\t"));
             input = input.substring(input.indexOf("\t")).trim();
             entryList[i].number = Integer.parseInt(input.substring(0, input.indexOf("\t")));
             input = input.substring(input.indexOf("\t")).trim();
-            entryList[i].notes = input;
+            entryList[i].notes  = input;
             numEntries++;
             } 
         }
