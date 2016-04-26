@@ -27,9 +27,9 @@ import javafx.scene.text.Font;
 public class Inventory extends Application{
     public Stage stage;
     public ToolBar toolBar;
-    public Button addButton, findButton, deleteButton, listButton, saveButton;
+    public Button addButton, findButton, deleteButton, 
+                 listButton, saveButton,   loadButton;
     public VBox mainScreen;
-    
     static int numEntries;
     public static Entry[] entryList = new Entry[200];
     
@@ -40,14 +40,16 @@ public class Inventory extends Application{
         deleteButton = new Button("Delete Entry");
         listButton   = new Button("List Entries");
         saveButton   = new Button("Save Entries");
+        loadButton   = new Button("Load Entries");
         mainScreen   = new VBox();
-        toolBar = new ToolBar(addButton, findButton, deleteButton, listButton, saveButton);
+        toolBar = new ToolBar(addButton, findButton, deleteButton, listButton, saveButton, loadButton);
         //toolBar.setMinHeight(50);
         this.stage.setTitle("Inventory");
         mainScreen.getChildren().addAll(toolBar);
-        this.stage.setScene(new Scene(mainScreen, 500, 650));
+        mainScreen.setPadding(new Insets(0, 0, 0, 0));
+        this.stage.setScene(new Scene(mainScreen));
         this.stage.show();
-        this.stage.setMinWidth(520);
+        this.stage.setMinHeight(650);
         
         addButton.setOnAction   (event -> {
             addEntry();
@@ -59,11 +61,10 @@ public class Inventory extends Application{
             deleteEntry();
         });
         saveButton.setOnAction  (event -> {
-            try {
-                storeInventory(numEntries);
-            }catch (Exception e) {
-                
-            }
+            saveOrLoad("Enter a name for the file.", true);
+        });
+        loadButton.setOnAction  (event -> {
+            saveOrLoad("Enter the name of the file you wish to load.", false);
         });
         listButton.setOnAction  (event -> {
             listEntries();
@@ -78,17 +79,17 @@ public class Inventory extends Application{
         TextField name, quantity, notes;
         VBox v;
         
-        addStage = new Stage();
-        G        = new GridPane();
-        ok       = new Button("OK");
+        addStage     = new Stage();
+        G            = new GridPane();
+        ok           = new Button("OK");
         nameText     = new Text("Item Name: ");
         numText      = new Text("Quantity: ");
         notesText    = new Text("Notes: ");
         instructions = new Text("Enter the name, quantity, and notes for the entry.");
-        v = new VBox();  
-        name     = new TextField("Name");
-        quantity = new TextField("#");
-        notes    = new TextField("N/A");
+        v            = new VBox();  
+        name         = new TextField("Name");
+        quantity     = new TextField("#");
+        notes        = new TextField("N/A");
 
         
         G.add(nameText, 1, 1);
@@ -164,11 +165,18 @@ public class Inventory extends Application{
        isSorted = false;
        while (!isSorted && i > 0) {
            if (entryList[i].name.compareTo(entryList[i - 1].name) < 0) {
-               String temp;
+               String tempName, tempNotes;
+               int tempNum;
                
-               temp = entryList[i - 1].name;
+               tempName  = entryList[i - 1].name;
+               tempNum   = entryList[i - 1].number;
+               tempNotes = entryList[i - 1].notes;
                entryList[i - 1].name = entryList[i].name;
-               entryList[i].name = temp;
+               entryList[i - 1].number = entryList[i].number;
+               entryList[i - 1].notes = entryList[i].notes;
+               entryList[i].name = tempName;
+               entryList[i].number = tempNum;
+               entryList[i].notes = tempNotes;
                i--;
            } else isSorted = true;
        }
@@ -295,12 +303,17 @@ public class Inventory extends Application{
         numLabel   = new Text("Quantity");
         notesLabel = new Text("Notes");
         column1.setHalignment(HPos.LEFT);
+        column1.setPercentWidth(10);
         G.setVgap(5);
-        G.setHgap(100);
+        //G.setHgap(10);
         G.add(nameLabel, 1, 1);
         G.add(numLabel, 2, 1);
         G.add(notesLabel, 3, 1);
         G.getColumnConstraints().add(column1);
+        G.setPadding(new Insets(10, 10, 10, 10));
+        //G.setMinWidth(mainScreen.getWidth());
+        //G.setAlignment(Pos.CENTER_LEFT);
+        
         entryName  = new Text[numEntries];
         entryNum   = new Text[numEntries];
         entryNotes = new Text[numEntries];
@@ -324,36 +337,79 @@ public class Inventory extends Application{
             G.add(entryNotes[i], 3, i + 2);
         }
         mainScreen.getChildren().addAll(toolBar, G);
+        mainScreen.setPadding(new Insets(0, 0, 0, 0));
     }
     
-    public void genericOK(String s, boolean b) {
+    public void genericOK(String m, boolean isSuccess) {
         Stage okStage = new Stage();
-        Text message  = new Text(s);
+        Text message  = new Text(m);
         Button ok     = new Button("OK");
         VBox v        = new VBox();
         
         v.getChildren().addAll(message, ok);
         v.setAlignment(Pos.CENTER);
         v.setPadding(new Insets(10, 10, 10, 10));
-        if (b)
+        v.setSpacing(10);
+        if (isSuccess)
             okStage.setTitle("Success");
         else
             okStage.setTitle("Whoops");
         okStage.setScene(new Scene(v));
-        okStage.setMinWidth(300);
-        okStage.setMinHeight(150);
         ok.setOnAction(event -> {
            okStage.close();
         });
         okStage.showAndWait();
     }
+    
+    public void saveOrLoad(String m, boolean isSave) {
+        Stage fieldStage =  new Stage();
+        Text message =      new Text(m);
+        TextField file =    new TextField("File");
+        Button ok =         new Button("OK");
+        VBox v =            new VBox();
+        
+        v.getChildren().addAll(message, file, ok);
+        v.setAlignment(Pos.CENTER);
+        v.setPadding(new Insets(10, 10, 10, 10));
+        v.setSpacing(10);
+        if (isSave)
+            fieldStage.setTitle("Save");
+        else
+            fieldStage.setTitle("Load");
+        fieldStage.setScene(new Scene(v));
+        ok.setOnAction(event -> {
+            if (isSave) {
+                try {
+                    storeInventory(numEntries, file.getText());
+                    fieldStage.close();
+                } catch (Exception e) {
+                    v.getChildren().clear();
+                    v.getChildren().addAll(new Text("Invalid file name. Try again."), file, ok);
+                }
+            } else {
+                try {
+                    readInventory(file.getText());
+                    genericOK("File loaded.", true);
+                    fieldStage.close();
+                } catch (Exception e) {
+                    v.getChildren().clear();
+                    genericOK("File not found.", false);
+                    fieldStage.close();
+                }
+            }
+        });
+        fieldStage.showAndWait();
+        
+        
+    }
     public static void main(String[] args) throws IOException {
         Application.launch(args);
     }
     
-    public static void readInventory () throws IOException {
+    public static void readInventory (String file) throws IOException {
         BufferedReader in;
-        in = new BufferedReader(new FileReader("storage.text"));
+        in = new BufferedReader(new FileReader(file + ".text"));
+        numEntries = 0;
         for (int i = 0; i < 200; i++) {
             String input;
             input = in.readLine();
@@ -373,9 +429,9 @@ public class Inventory extends Application{
         in.close();
     }
 
-    public void storeInventory (int numEntries) 
+    public void storeInventory (int numEntries, String file) 
         throws IOException {
-            PrintStream P = new PrintStream("storage.text");
+            PrintStream P = new PrintStream(file + ".text");
             for (int i = 0; i < numEntries; i++) {
                 P.println(entryList[i].name + "\t" + entryList[i].number + "\t"
                 + entryList[i].notes);
