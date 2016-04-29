@@ -129,8 +129,10 @@ public class Inventory extends Application{
             ID = name.getText();
             try {
                 num  = Integer.parseInt(quantity.getText());
-                note = notes.getText();
-                String nameError, numError;
+                note = notes.getText().trim();
+                if (note.equals(""))
+                       note = "N/A";
+                String nameError, numError, noteError;
                 
                 nameError = "";
                 numError  = "";
@@ -144,11 +146,11 @@ public class Inventory extends Application{
                    addStage.setMinWidth(430);
                    addStage.setMinHeight(350);
                 } else {
-                addEntry(ID, num, note);
-                sortEntries();
-                genericOK("Entry Added.", true);
-                listEntries();
-                addStage.close();
+                    addEntry(ID, num, note);
+                    sortEntries();
+                    genericOK("Entry Added.", true);
+                    listEntries();
+                    addStage.close();
                 }
             } catch (Exception e) {
                 v.getChildren().clear();
@@ -258,13 +260,13 @@ public class Inventory extends Application{
                             entryNum[x]   = new Text(entryList[i].number + "");
                             entryNotes[x] = new Text(entryList[i].notes);
                             if (x % 2 == 1) {
-                                entryName[x].setFill (Color.GREEN);
-                                entryNum[x].setFill  (Color.GREEN);
-                                entryNotes[x].setFill(Color.GREEN);
-                            } else {
                                 entryName[x].setFill (Color.BLUE);
                                 entryNum[x].setFill  (Color.BLUE);
                                 entryNotes[x].setFill(Color.BLUE);
+                            } else {
+                                entryName[x].setFill (Color.GREEN);
+                                entryNum[x].setFill  (Color.GREEN);
+                                entryNotes[x].setFill(Color.GREEN);
                             }
                             G.add(entryName[x], 1, x + 2);
                             G.add(entryNum[x], 2, x + 2);
@@ -376,13 +378,13 @@ public class Inventory extends Application{
             entryNum[i]   = new Text(entryList[i].number + "");
             entryNotes[i] = new Text(entryList[i].notes);
             if (i % 2 == 1) {
-                entryName[i].setFill (Color.GREEN);
-                entryNum[i].setFill  (Color.GREEN);
-                entryNotes[i].setFill(Color.GREEN);
-            } else {
                 entryName[i].setFill (Color.BLUE);
                 entryNum[i].setFill  (Color.BLUE);
                 entryNotes[i].setFill(Color.BLUE);
+            } else {
+                entryName[i].setFill (Color.GREEN);
+                entryNum[i].setFill  (Color.GREEN);
+                entryNotes[i].setFill(Color.GREEN);
             }
             G.add(entryName[i], 1, i + 2);
             G.add(entryNum[i], 2, i + 2);
