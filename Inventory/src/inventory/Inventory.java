@@ -25,7 +25,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-
 public class Inventory extends Application{
     public Stage stage;
     public MenuBar menuBar;
@@ -58,7 +57,6 @@ public class Inventory extends Application{
         this.stage.show();
         this.stage.setMinWidth(450);
         this.stage.setMinHeight(650);
-        
         addItem.setOnAction   (ActionEvent -> {
             addEntry();
         });  
@@ -98,7 +96,6 @@ public class Inventory extends Application{
         name         = new TextField("Name");
         quantity     = new TextField("#");
         notes        = new TextField("N/A");
-    
         G.add(nameText, 1, 1);
         G.add(numText, 1, 2);
         G.add(notesText, 1, 3);
@@ -110,15 +107,12 @@ public class Inventory extends Application{
         G.setAlignment (Pos.CENTER);
         G.setHalignment(numText, HPos.RIGHT);
         G.setHalignment(notesText, HPos.RIGHT);
-  
         v.getChildren().addAll(instructions, G, ok);
         v.setPadding(new Insets(20, 20, 20, 20));
         v.setSpacing(10);
         v.setAlignment(Pos.CENTER);
-        
         addStage.setScene(new Scene(v));
         addStage.setTitle("Add Entry");
-        
         ok.setOnAction(event -> {
             String ID, note;
             int num;
@@ -130,7 +124,6 @@ public class Inventory extends Application{
                 if (note.equals(""))
                        note = "N/A";
                 String nameError, numError, noteError;
-                
                 nameError = "";
                 numError  = "";
                 if (ID.length() > 8 || num < 0) {
@@ -199,12 +192,11 @@ public class Inventory extends Application{
         Text instructions;
         TextField field;
         
-        findStage = new Stage();
-        v  = new VBox();
-        ok = new Button("OK");
+        findStage    = new Stage();
+        v            = new VBox();
+        ok           = new Button("OK");
         instructions = new Text("Enter the name or part of the name of the item you wish to find.");
-        field = new TextField("Item");
-        
+        field        = new TextField("Item");
         v.getChildren().addAll(instructions, field, ok);
         v.setAlignment(Pos.CENTER);
         v.setPadding(new Insets(10, 10, 10, 10));
@@ -230,19 +222,15 @@ public class Inventory extends Application{
                 nameLabel  = new Text("Item Name     ");
                 numLabel   = new Text("Quantity   ");
                 notesLabel = new Text("Notes");
-                //column1.setHalignment(HPos.LEFT);
-                //column2.setHalignment(HPos.LEFT);
                 G.setVgap(5);
                 G.add(nameLabel, 1, 1);
                 G.add(numLabel, 2, 1);
                 G.add(notesLabel, 3, 1);
                 G.getColumnConstraints().addAll(column1, column1, column2);
                 G.setPadding(new Insets(10, 10, 10, 10));
-
                 entryName  = new Text[numEntries];
                 entryNum   = new Text[numEntries];
                 entryNotes = new Text[numEntries];
-                
                 mainScreen.getChildren().clear();          
                 int sLength;
                 boolean isFound;
@@ -270,7 +258,7 @@ public class Inventory extends Application{
                             G.add(entryNotes[x], 3, x + 2);
                             x++;
                             isFound = true;
-                    }
+                        }
                 }
                 S = new ScrollPane(G);
                 mainScreen.getChildren().addAll(menuBar, S);
@@ -285,7 +273,6 @@ public class Inventory extends Application{
             }
         });
         findStage.showAndWait();
-        
     }
     
     public void deleteEntry() {
@@ -329,7 +316,6 @@ public class Inventory extends Application{
             }
         });
         deleteStage.showAndWait();
-        
     }
     
     public void delete(int index) {
@@ -349,27 +335,20 @@ public class Inventory extends Application{
         ScrollPane S;
         Text nameLabel, numLabel, notesLabel;
         Text[] entryName, entryNum, entryNotes;
-        ColumnConstraints column1 = new ColumnConstraints();
-        ColumnConstraints column2 = new ColumnConstraints();
     
         G = new GridPane();      
         nameLabel  = new Text("Item Name     ");
         numLabel   = new Text("Quantity   ");
         notesLabel = new Text("Notes");
-        //column1.setHalignment(HPos.LEFT);
-        //column2.setHalignment(HPos.LEFT);
         G.setVgap(5);
         G.add(nameLabel, 1, 1);
         G.add(numLabel, 2, 1);
         G.add(notesLabel, 3, 1);
-        G.getColumnConstraints().addAll(column1, column1, column2);
         G.setPadding(new Insets(10, 10, 10, 10));
-        
         entryName  = new Text[numEntries];
         entryNum   = new Text[numEntries];
         entryNotes = new Text[numEntries];
-        mainScreen.getChildren().clear();        
-        
+        mainScreen.getChildren().clear();
         for (int i = 0; i < numEntries; i++) {
             entryName[i]  = new Text(entryList[i].name);
             entryNum[i]   = new Text(entryList[i].number + "");
@@ -383,8 +362,8 @@ public class Inventory extends Application{
                 entryNum[i].setFill  (Color.GREEN);
                 entryNotes[i].setFill(Color.GREEN);
             }
-            G.add(entryName[i], 1, i + 2);
-            G.add(entryNum[i], 2, i + 2);
+            G.add(entryName[i],  1, i + 2);
+            G.add(entryNum[i],   2, i + 2);
             G.add(entryNotes[i], 3, i + 2);
         }
         S = new ScrollPane(G);
@@ -464,6 +443,7 @@ public class Inventory extends Application{
         numEntries = 0;
         for (int i = 0; i < 200; i++) {
             String input;
+            
             input = in.readLine();
             if (input == null)
                 i = 200;
