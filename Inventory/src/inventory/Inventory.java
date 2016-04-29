@@ -14,18 +14,23 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.text.Font;
 
 
 public class Inventory extends Application{
     public Stage stage;
+    public MenuBar menuBar;
+    public Menu fileMenu, entryMenu;
+    public MenuItem saveItem, loadItem, addItem, findItem, deleteItem, listItem;
     public ToolBar toolBar;
     public Button addButton, findButton, deleteButton, 
                  listButton, saveButton,   loadButton;
@@ -35,38 +40,43 @@ public class Inventory extends Application{
     
     public void start(Stage stage) {
         this.stage   = stage;
-        addButton    = new Button("Add Entry");
-        findButton   = new Button("Find Entry");
-        deleteButton = new Button("Delete Entry");
-        listButton   = new Button("List Entries");
-        saveButton   = new Button("Save Entries");
-        loadButton   = new Button("Load Entries");
+        menuBar = new MenuBar();
+        fileMenu = new Menu("File");
+        entryMenu = new Menu("Entry");
+        saveItem = new MenuItem("Save Entries");
+        loadItem = new MenuItem("Load Entries");
+        addItem = new MenuItem("Add");
+        findItem = new MenuItem("Find");
+        deleteItem = new MenuItem("Delete");
+        listItem = new MenuItem("List");
         mainScreen   = new VBox();
-        toolBar = new ToolBar(addButton, findButton, deleteButton, listButton, saveButton, loadButton);
-        //toolBar.setMinHeight(50);
+        fileMenu.getItems().addAll(saveItem, loadItem);
+        entryMenu.getItems().addAll(addItem, findItem, deleteItem, listItem);
+        menuBar.getMenus().addAll(fileMenu, entryMenu);
         this.stage.setTitle("Inventory");
-        mainScreen.getChildren().addAll(toolBar);
+        mainScreen.getChildren().addAll(menuBar);
         mainScreen.setPadding(new Insets(0, 0, 0, 0));
         this.stage.setScene(new Scene(mainScreen));
         this.stage.show();
+        this.stage.setMinWidth(450);
         this.stage.setMinHeight(650);
         
-        addButton.setOnAction   (event -> {
+        addItem.setOnAction   (ActionEvent -> {
             addEntry();
-        });
-        findButton.setOnAction  (event -> {
+        });  
+        findItem.setOnAction  (ActionEvent -> {
             findEntry();
         });
-        deleteButton.setOnAction(event -> {
+        deleteItem.setOnAction(ActionEvent -> {
             deleteEntry();
         });
-        saveButton.setOnAction  (event -> {
+        saveItem.setOnAction  (ActionEvent -> {
             saveOrLoad("Enter a name for the file.", true);
         });
-        loadButton.setOnAction  (event -> {
+        loadItem.setOnAction  (ActionEvent -> {
             saveOrLoad("Enter the name of the file you wish to load.", false);
         });
-        listButton.setOnAction  (event -> {
+        listItem.setOnAction  (ActionEvent -> {
             listEntries();
         });
     }
@@ -137,6 +147,7 @@ public class Inventory extends Application{
                 addEntry(ID, num, note);
                 sortEntries();
                 genericOK("Entry Added.", true);
+                listEntries();
                 addStage.close();
                 }
             } catch (Exception e) {
@@ -164,7 +175,7 @@ public class Inventory extends Application{
        i = numEntries - 1;
        isSorted = false;
        while (!isSorted && i > 0) {
-           if (entryList[i].name.compareTo(entryList[i - 1].name) < 0) {
+           if (entryList[i].name.compareToIgnoreCase(entryList[i - 1].name) < 0) {
                String tempName, tempNotes;
                int tempNum;
                
@@ -193,7 +204,6 @@ public class Inventory extends Application{
         v  = new VBox();
         ok = new Button("OK");
         instructions = new Text("Enter the name or part of the name of the item you wish to find.");
-        instructions.setFont(Font.font(20));
         field = new TextField("Item");
         
         v.getChildren().addAll(instructions, field, ok);
@@ -208,6 +218,33 @@ public class Inventory extends Application{
             
             search = field.getText();
             if (search != null) {
+                GridPane G;
+                ScrollPane S;
+                Text nameLabel, numLabel, notesLabel;
+                Text[] entryName, entryNum, entryNotes;
+                ColumnConstraints column1 = new ColumnConstraints();
+                ColumnConstraints column2 = new ColumnConstraints();
+                int x;
+    
+                x = 0;
+                G = new GridPane();      
+                nameLabel  = new Text("Item Name     ");
+                numLabel   = new Text("Quantity   ");
+                notesLabel = new Text("Notes");
+                //column1.setHalignment(HPos.LEFT);
+                //column2.setHalignment(HPos.LEFT);
+                G.setVgap(5);
+                G.add(nameLabel, 1, 1);
+                G.add(numLabel, 2, 1);
+                G.add(notesLabel, 3, 1);
+                G.getColumnConstraints().addAll(column1, column1, column2);
+                G.setPadding(new Insets(10, 10, 10, 10));
+
+                entryName  = new Text[numEntries];
+                entryNum   = new Text[numEntries];
+                entryNotes = new Text[numEntries];
+                
+                mainScreen.getChildren().clear();          
                 int sLength;
                 boolean isFound;
                     
@@ -215,19 +252,35 @@ public class Inventory extends Application{
                 isFound = false;
                 
                 for (int i = 0; i < numEntries; i++) {
-                    if (sLength < entryList[i].name.length())
+                    if (sLength <= entryList[i].name.length())
                         if (search.equalsIgnoreCase(entryList[i].name.substring(0, sLength))) {
-                            System.out.println("-- " + entryList[i].name);
-                            System.out.println("-- " + entryList[i].number);
-                            System.out.println("-- " + entryList[i].notes + "\n");
+                            entryName[x]  = new Text(entryList[i].name);
+                            entryNum[x]   = new Text(entryList[i].number + "");
+                            entryNotes[x] = new Text(entryList[i].notes);
+                            if (x % 2 == 1) {
+                                entryName[x].setFill (Color.GREEN);
+                                entryNum[x].setFill  (Color.GREEN);
+                                entryNotes[x].setFill(Color.GREEN);
+                            } else {
+                                entryName[x].setFill (Color.BLUE);
+                                entryNum[x].setFill  (Color.BLUE);
+                                entryNotes[x].setFill(Color.BLUE);
+                            }
+                            G.add(entryName[x], 1, x + 2);
+                            G.add(entryNum[x], 2, x + 2);
+                            G.add(entryNotes[x], 3, x + 2);
+                            x++;
                             isFound = true;
                     }
                 }
+                S = new ScrollPane(G);
+                mainScreen.getChildren().addAll(menuBar, S);
+                mainScreen.setPadding(new Insets(0, 0, 0, 0));
                 if (!isFound) {
-                    genericOK("We couldn't find the item you're looking for.\n", false);
+                    genericOK("We couldn't find the item you're looking for.", false);
                     findStage.close();
                 } else {
-                    genericOK("Item(s) Found.\n", true);
+                    genericOK("Item(s) Found.", true);
                     findStage.close();
                 }
             }
@@ -246,7 +299,6 @@ public class Inventory extends Application{
         deleteStage  = new Stage();
         instructions = new Text("Enter the name of the item you wish to delete.");
         f = new TextField("Name");
-        instructions.setFont(Font.font(20));
         ok = new Button("Delete");
         v  = new VBox();
         v.setAlignment(Pos.CENTER);
@@ -272,7 +324,7 @@ public class Inventory extends Application{
                 if (isFound)
                     genericOK("Item Deleted", true);
                 else
-                    genericOK("We couldn't find the item you're looking for.\n", false);
+                    genericOK("We couldn't find the item you're looking for.", false);
                 deleteStage.close();
             }
         });
@@ -294,25 +346,24 @@ public class Inventory extends Application{
     
     public void listEntries() {
         GridPane G;
+        ScrollPane S;
         Text nameLabel, numLabel, notesLabel;
         Text[] entryName, entryNum, entryNotes;
         ColumnConstraints column1 = new ColumnConstraints();
+        ColumnConstraints column2 = new ColumnConstraints();
     
         G = new GridPane();      
-        nameLabel  = new Text("Item Name");
-        numLabel   = new Text("Quantity");
+        nameLabel  = new Text("Item Name     ");
+        numLabel   = new Text("Quantity   ");
         notesLabel = new Text("Notes");
-        column1.setHalignment(HPos.LEFT);
-        column1.setPercentWidth(10);
+        //column1.setHalignment(HPos.LEFT);
+        //column2.setHalignment(HPos.LEFT);
         G.setVgap(5);
-        //G.setHgap(10);
         G.add(nameLabel, 1, 1);
         G.add(numLabel, 2, 1);
         G.add(notesLabel, 3, 1);
-        G.getColumnConstraints().add(column1);
+        G.getColumnConstraints().addAll(column1, column1, column2);
         G.setPadding(new Insets(10, 10, 10, 10));
-        //G.setMinWidth(mainScreen.getWidth());
-        //G.setAlignment(Pos.CENTER_LEFT);
         
         entryName  = new Text[numEntries];
         entryNum   = new Text[numEntries];
@@ -336,7 +387,8 @@ public class Inventory extends Application{
             G.add(entryNum[i], 2, i + 2);
             G.add(entryNotes[i], 3, i + 2);
         }
-        mainScreen.getChildren().addAll(toolBar, G);
+        S = new ScrollPane(G);
+        mainScreen.getChildren().addAll(menuBar, S);
         mainScreen.setPadding(new Insets(0, 0, 0, 0));
     }
     
@@ -355,7 +407,7 @@ public class Inventory extends Application{
         else
             okStage.setTitle("Whoops");
         okStage.setScene(new Scene(v));
-        ok.setOnAction(event -> {
+        ok.setOnAction(ActionEvent -> {
            okStage.close();
         });
         okStage.showAndWait();
@@ -389,6 +441,7 @@ public class Inventory extends Application{
             } else {
                 try {
                     readInventory(file.getText());
+                    sortEntries();
                     genericOK("File loaded.", true);
                     fieldStage.close();
                 } catch (Exception e) {
