@@ -32,27 +32,25 @@ public class Inventory extends Application{
     public Menu fileMenu, entryMenu;
     public MenuItem saveItem, loadItem, addItem, findItem, deleteItem, listItem;
     public ToolBar toolBar;
-    public Button addButton, findButton, deleteButton, 
-                 listButton, saveButton,   loadButton;
     public VBox mainScreen;
     static int numEntries;
     public static Entry[] entryList = new Entry[200];
     
     public void start(Stage stage) {
-        this.stage   = stage;
-        menuBar = new MenuBar();
-        fileMenu = new Menu("File");
-        entryMenu = new Menu("Entry");
-        saveItem = new MenuItem("Save Entries");
-        loadItem = new MenuItem("Load Entries");
-        addItem = new MenuItem("Add");
-        findItem = new MenuItem("Find");
+        this.stage = stage;
+        menuBar    = new MenuBar();
+        fileMenu   = new Menu("File");
+        entryMenu  = new Menu("Entry");
+        saveItem   = new MenuItem("Save Entries");
+        loadItem   = new MenuItem("Load Entries");
+        addItem    = new MenuItem("Add");
+        findItem   = new MenuItem("Find");
         deleteItem = new MenuItem("Delete");
-        listItem = new MenuItem("List");
-        mainScreen   = new VBox();
-        fileMenu.getItems().addAll(saveItem, loadItem);
-        entryMenu.getItems().addAll(addItem, findItem, deleteItem, listItem);
-        menuBar.getMenus().addAll(fileMenu, entryMenu);
+        listItem   = new MenuItem("List");
+        mainScreen = new VBox();
+        fileMenu  .getItems().addAll(saveItem, loadItem);
+        entryMenu .getItems().addAll(addItem, findItem, deleteItem, listItem);
+        menuBar   .getMenus().addAll(fileMenu, entryMenu);
         this.stage.setTitle("Inventory");
         mainScreen.getChildren().addAll(menuBar);
         mainScreen.setPadding(new Insets(0, 0, 0, 0));
@@ -100,8 +98,7 @@ public class Inventory extends Application{
         name         = new TextField("Name");
         quantity     = new TextField("#");
         notes        = new TextField("N/A");
-
-        
+    
         G.add(nameText, 1, 1);
         G.add(numText, 1, 2);
         G.add(notesText, 1, 3);
@@ -110,7 +107,7 @@ public class Inventory extends Application{
         G.add(notes, 2, 3);
         G.setVgap(10);
         G.setHgap(10);
-        G.setAlignment(Pos.CENTER);
+        G.setAlignment (Pos.CENTER);
         G.setHalignment(numText, HPos.RIGHT);
         G.setHalignment(notesText, HPos.RIGHT);
   
@@ -155,7 +152,7 @@ public class Inventory extends Application{
             } catch (Exception e) {
                 v.getChildren().clear();
                 v.getChildren().addAll(instructions, new Text("Amount must be an integer value greater than or equal to 0\n"), G, ok);
-                addStage.setMinWidth(430);
+                addStage.setMinWidth (430);
                 addStage.setMinHeight(350);//addStage.setScene(new Scene(v));
             }   
         });
@@ -184,12 +181,12 @@ public class Inventory extends Application{
                tempName  = entryList[i - 1].name;
                tempNum   = entryList[i - 1].number;
                tempNotes = entryList[i - 1].notes;
-               entryList[i - 1].name = entryList[i].name;
+               entryList[i - 1].name   = entryList[i].name;
                entryList[i - 1].number = entryList[i].number;
-               entryList[i - 1].notes = entryList[i].notes;
-               entryList[i].name = tempName;
+               entryList[i - 1].notes  = entryList[i].notes;
+               entryList[i].name   = tempName;
                entryList[i].number = tempNum;
-               entryList[i].notes = tempNotes;
+               entryList[i].notes  = tempNotes;
                i--;
            } else isSorted = true;
        }
@@ -268,8 +265,8 @@ public class Inventory extends Application{
                                 entryNum[x].setFill  (Color.GREEN);
                                 entryNotes[x].setFill(Color.GREEN);
                             }
-                            G.add(entryName[x], 1, x + 2);
-                            G.add(entryNum[x], 2, x + 2);
+                            G.add( entryName[x], 1, x + 2);
+                            G.add(  entryNum[x], 2, x + 2);
                             G.add(entryNotes[x], 3, x + 2);
                             x++;
                             isFound = true;
@@ -417,11 +414,11 @@ public class Inventory extends Application{
     }
     
     public void saveOrLoad(String m, boolean isSave) {
-        Stage fieldStage =  new Stage();
-        Text message =      new Text(m);
-        TextField file =    new TextField("File");
-        Button ok =         new Button("OK");
-        VBox v =            new VBox();
+        Stage fieldStage = new Stage();
+        Text message     = new Text(m);
+        TextField file   = new TextField("File");
+        Button ok        = new Button("OK");
+        VBox v           = new VBox();
         
         v.getChildren().addAll(message, file, ok);
         v.setAlignment(Pos.CENTER);
@@ -455,9 +452,7 @@ public class Inventory extends Application{
                 }
             }
         });
-        fieldStage.showAndWait();
-        
-        
+        fieldStage.showAndWait(); 
     }
     public static void main(String[] args) throws IOException {
         Application.launch(args);
