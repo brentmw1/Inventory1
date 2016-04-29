@@ -217,7 +217,7 @@ public class Inventory extends Application{
             String search;
             
             search = field.getText();
-            if (search != null) {
+            if (field.getText() != null) {
                 GridPane G;
                 ScrollPane S;
                 Text nameLabel, numLabel, notesLabel;
@@ -321,9 +321,10 @@ public class Inventory extends Application{
                         isFound = true;
                     }
                 }
-                if (isFound)
+                if (isFound) {
                     genericOK("Item Deleted", true);
-                else
+                    listEntries();
+                } else
                     genericOK("We couldn't find the item you're looking for.", false);
                 deleteStage.close();
             }
@@ -443,6 +444,7 @@ public class Inventory extends Application{
                     readInventory(file.getText());
                     sortEntries();
                     genericOK("File loaded.", true);
+                    listEntries();
                     fieldStage.close();
                 } catch (Exception e) {
                     v.getChildren().clear();
