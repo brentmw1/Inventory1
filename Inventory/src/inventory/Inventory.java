@@ -30,8 +30,7 @@ public class Inventory extends Application{
     public Stage stage;
     public MenuBar menuBar;
     public Menu fileMenu, entryMenu;
-    public MenuItem saveItem, loadItem, addItem, findItem, deleteItem,
-            listItem;
+    public MenuItem saveItem, loadItem, addItem, findItem, deleteItem, listItem;
     public ToolBar toolBar;
     public VBox mainScreen;
     static int numEntries;
@@ -94,8 +93,7 @@ public class Inventory extends Application{
         nameText     = new Text("Item Name: ");
         numText      = new Text("Quantity: ");
         notesText    = new Text("Notes: ");
-        instructions = new Text("Enter the name, quantity, and notes "
-                + "for the entry.");
+        instructions = new Text("Enter the name, quantity, and notes for the entry.");
         v            = new VBox();  
         name         = new TextField("Name");
         quantity     = new TextField("#");
@@ -139,11 +137,9 @@ public class Inventory extends Application{
                    if (ID.length() > 8) 
                        nameError = "Item name bust be 8 or fewer characters.";
                    if (num < 0)
-                       numError = "Amount must be an integer value greater"
-                               + " than or equal to 0.";
+                       numError = "Amount must be an integer value greater than or equal to 0.";
                    v.getChildren().clear();
-                   v.getChildren().addAll(instructions, new Text(nameError),
-                           new Text(numError), G, ok);
+                   v.getChildren().addAll(instructions, new Text(nameError), new Text(numError), G, ok);
                    addStage.setMinWidth(430);
                    addStage.setMinHeight(350);
                 } else {
@@ -155,9 +151,7 @@ public class Inventory extends Application{
                 }
             } catch (Exception e) {
                 v.getChildren().clear();
-                v.getChildren().addAll(instructions, new Text("Amount must"
-                        + " be an integer value greater than or equal"
-                        + " to 0\n"), G, ok);
+                v.getChildren().addAll(instructions, new Text("Amount must be an integer value greater than or equal to 0\n"), G, ok);
                 addStage.setMinWidth (430);
                 addStage.setMinHeight(350);//addStage.setScene(new Scene(v));
             }   
@@ -180,8 +174,7 @@ public class Inventory extends Application{
        i = numEntries - 1;
        isSorted = false;
        while (!isSorted && i > 0) {
-           if (entryList[i].name.compareToIgnoreCase(entryList[i - 1].name)
-                   < 0) {
+           if (entryList[i].name.compareToIgnoreCase(entryList[i - 1].name) < 0) {
                String tempName, tempNotes;
                int tempNum;
                
@@ -209,8 +202,7 @@ public class Inventory extends Application{
         findStage = new Stage();
         v  = new VBox();
         ok = new Button("OK");
-        instructions = new Text("Enter the name or part of the name of the"
-                + " item you wish to find.");
+        instructions = new Text("Enter the name or part of the name of the item you wish to find.");
         field = new TextField("Item");
         
         v.getChildren().addAll(instructions, field, ok);
@@ -260,8 +252,7 @@ public class Inventory extends Application{
                 
                 for (int i = 0; i < numEntries; i++) {
                     if (sLength <= entryList[i].name.length())
-                        if (search.equalsIgnoreCase(entryList[i].name
-                                .substring(0, sLength))) {
+                        if (search.equalsIgnoreCase(entryList[i].name.substring(0, sLength))) {
                             entryName[x]  = new Text(entryList[i].name);
                             entryNum[x]   = new Text(entryList[i].number + "");
                             entryNotes[x] = new Text(entryList[i].notes);
@@ -285,8 +276,7 @@ public class Inventory extends Application{
                 mainScreen.getChildren().addAll(menuBar, S);
                 mainScreen.setPadding(new Insets(0, 0, 0, 0));
                 if (!isFound) {
-                    genericOK("We couldn't find the item you're looking for.",
-                            false);
+                    genericOK("We couldn't find the item you're looking for.", false);
                     findStage.close();
                 } else {
                     genericOK("Item(s) Found.", true);
@@ -306,8 +296,7 @@ public class Inventory extends Application{
         Button ok;
         
         deleteStage  = new Stage();
-        instructions = new Text("Enter the name of the item you wish to"
-                + " delete.");
+        instructions = new Text("Enter the name of the item you wish to delete.");
         f = new TextField("Name");
         ok = new Button("Delete");
         v  = new VBox();
@@ -335,8 +324,7 @@ public class Inventory extends Application{
                     genericOK("Item Deleted", true);
                     listEntries();
                 } else
-                    genericOK("We couldn't find the item you're looking for.",
-                            false);
+                    genericOK("We couldn't find the item you're looking for.", false);
                 deleteStage.close();
             }
         });
@@ -448,8 +436,7 @@ public class Inventory extends Application{
                     fieldStage.close();
                 } catch (Exception e) {
                     v.getChildren().clear();
-                    v.getChildren().addAll(new Text("Invalid file name."
-                            + " Try again."), file, ok);
+                    v.getChildren().addAll(new Text("Invalid file name. Try again."), file, ok);
                 }
             } else {
                 try {
@@ -485,8 +472,7 @@ public class Inventory extends Application{
             entryList[i] = new Entry();
             entryList[i].name   = input.substring(0, input.indexOf("\t"));
             input = input.substring(input.indexOf("\t")).trim();
-            entryList[i].number = Integer.parseInt(input.substring(0, input
-                    .indexOf("\t")));
+            entryList[i].number = Integer.parseInt(input.substring(0, input.indexOf("\t")));
             input = input.substring(input.indexOf("\t")).trim();
             entryList[i].notes  = input;
             numEntries++;
@@ -499,8 +485,7 @@ public class Inventory extends Application{
         throws IOException {
             PrintStream P = new PrintStream(file + ".text");
             for (int i = 0; i < numEntries; i++) {
-                P.println(entryList[i].name + "\t" + entryList[i].number
-                        + "\t"
+                P.println(entryList[i].name + "\t" + entryList[i].number + "\t"
                 + entryList[i].notes);
             }
             P.close();
