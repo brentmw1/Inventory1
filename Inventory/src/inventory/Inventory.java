@@ -1,9 +1,9 @@
-//Brent Wickenheiser
-//Joseph Ferrara
+// Brent Wickenheiser
+// Joseph Ferrara
 
-//Project 6
-/*Allows user to enter and search items in an inventory list that will save
-between runs of the program*/
+// Project 6
+/* Allows user to enter and search items in an inventory list that will save
+between runs of the program. Uses a GUI and object oriented programming */
 package inventory;
 import javafx.stage.*;
 import java.io.*;
@@ -479,8 +479,7 @@ public class Inventory extends Application{
             PrintStream P = new PrintStream(file + ".text");
             for (int i = 0; i < numEntries; i++) {
                 P.println(entryList[i].name + "\t" + entryList[i].number 
-                        + "\t"
-                + entryList[i].notes);
+                        + "\t" + entryList[i].notes);
             }
             P.close();
             genericOK("List Saved.", true);
