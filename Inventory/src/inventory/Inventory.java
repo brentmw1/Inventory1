@@ -251,7 +251,8 @@ public class Inventory extends Application{
                         if (search.equalsIgnoreCase(entryList[i].name
                                 .substring(0, sLength))) {
                             entryName[x]  = new Text(entryList[i].name);
-                            entryNum[x]   = new Text(entryList[i].number + "");
+                            entryNum[x]   = new Text(entryList[i].number 
+                                    + "");
                             entryNotes[x] = new Text(entryList[i].notes);
                             if (x % 2 == 1) {
                                 entryName[x].setFill (Color.BLUE);
