@@ -1,9 +1,9 @@
 // Brent Wickenheiser
 // Joseph Ferrara
-
 // Project 6
 /* Allows user to enter and search items in an inventory list that will save
 between runs of the program. Uses a GUI and object oriented programming */
+
 package inventory;
 import javafx.stage.*;
 import java.io.*;
@@ -149,7 +149,8 @@ public class Inventory extends Application{
             } catch (Exception e) {
                 v.getChildren().clear();
                 v.getChildren().addAll(instructions, new Text("Amount must be"
-                        + " an integer value greater than or equal to 0\n"), G, ok);
+                        + " an integer value greater than or equal to 0\n"),
+                        G, ok);
                 addStage.setMinWidth (430);
                 addStage.setMinHeight(350);//addStage.setScene(new Scene(v));
             }   
@@ -321,8 +322,8 @@ public class Inventory extends Application{
                     genericOK("Item Deleted", true);
                     listEntries();
                 } else
-                    genericOK("We couldn't find the item you're looking for.",
-                            false);
+                    genericOK("We couldn't find the item you're"
+                            + " looking for.", false);
                 deleteStage.close();
             }
         });
